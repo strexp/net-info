@@ -30,31 +30,33 @@ export default {
     NodeInfo
   },
   mounted() {
-    this.$ajax.get("/static/graph.json").then(response => {
-      this.nodes = response.data.nodes;
-      this.edges = response.data.edges;
-      for (var i = 0; i < this.nodes.length; ++i) {
-        var node = this.nodes[i];
-        node.id = parseInt(node.id);
-        node.size = node.size * 5;
-        node.peers = [];
-      }
-      for (i = 0; i < this.edges.length; ++i) {
-        var edge = this.edges[i];
-        edge.id = i;
-        edge.target = parseInt(edge.targetID);
-        edge.source = parseInt(edge.sourceID);
-        for (var n = 0; n < this.nodes.length; ++n) {
-          if (this.nodes[n].id == edge.sourceID) {
-            var sourceNode = this.nodes[n];
-          } else if (this.nodes[n].id == edge.targetID)
-            var targetNode = this.nodes[n];
+    this.$ajax
+      .get("/static/graph.json?rnd=" + Math.floor(Date.now() / 600000))
+      .then(response => {
+        this.nodes = response.data.nodes;
+        this.edges = response.data.edges;
+        for (var i = 0; i < this.nodes.length; ++i) {
+          var node = this.nodes[i];
+          node.id = parseInt(node.id);
+          node.size = node.size * 5;
+          node.peers = [];
         }
-        if (!sourceNode || !targetNode) continue;
-        sourceNode.peers.push({ id: targetNode.id, label: targetNode.label });
-        targetNode.peers.push({ id: sourceNode.id, label: sourceNode.label });
-      }
-    });
+        for (i = 0; i < this.edges.length; ++i) {
+          var edge = this.edges[i];
+          edge.id = i;
+          edge.target = parseInt(edge.targetID);
+          edge.source = parseInt(edge.sourceID);
+          for (var n = 0; n < this.nodes.length; ++n) {
+            if (this.nodes[n].id == edge.sourceID) {
+              var sourceNode = this.nodes[n];
+            } else if (this.nodes[n].id == edge.targetID)
+              var targetNode = this.nodes[n];
+          }
+          if (!sourceNode || !targetNode) continue;
+          sourceNode.peers.push({ id: targetNode.id, label: targetNode.label });
+          targetNode.peers.push({ id: sourceNode.id, label: sourceNode.label });
+        }
+      });
   }
 };
 </script>

@@ -86,7 +86,11 @@ export default {
   }),
   mounted() {
     this.$ajax
-      .get(process.env.VUE_APP_API_URL + "/alerts.json")
+      .get(
+        process.env.VUE_APP_API_URL +
+          "/alerts.json?rnd=" +
+          Math.floor(Date.now() / 600000)
+      )
       .then(response => {
         response.data.roa_data.forEach(alt => {
           if (

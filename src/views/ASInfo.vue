@@ -17,8 +17,7 @@
           <v-btn :to="'/path/' + asdata.asn['aut-num'][0]" text>BGP Map</v-btn>
           <v-spacer />
           <span class="grey--text"
-            >Last Updated:
-            {{ new Date(asdata.created * 1e3).toISOString() }}</span
+            >Last Updated: {{ new Date(asdata.created * 1e3).toString() }}</span
           >
         </v-card-actions>
       </v-card>
@@ -100,7 +99,8 @@ export default {
         process.env.VUE_APP_API_URL +
           "/as/AS" +
           this.$route.params.asn +
-          ".json"
+          ".json?rnd=" +
+          Math.floor(Date.now() / 600000)
       )
       .then(response => {
         this.asdata = response.data;
