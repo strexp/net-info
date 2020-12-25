@@ -1,13 +1,13 @@
 <template>
   <v-card :color="color" dark>
-    <v-icon large class="dashboard-icon">{{icon}}</v-icon>
+    <v-icon large class="dashboard-icon">{{ icon }}</v-icon>
     <v-list-item three-line>
       <v-list-item-content>
-        <div class="overline mb-5">{{descr}}</div>
+        <div class="overline mb-5">{{ descr }}</div>
         <v-list-item-title class="text-h4 mb-3">
-          <b>&nbsp; {{num}}</b>
+          <b>&nbsp; {{ num }}</b>
         </v-list-item-title>
-        <v-list-item-subtitle>{{title}}</v-list-item-subtitle>
+        <v-list-item-subtitle>{{ title }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
   </v-card>

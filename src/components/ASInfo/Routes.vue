@@ -24,8 +24,12 @@
           {{ "route6" in route ? route.route6[0] : route.route[0] }}
         </v-list-item-title>
         <v-list-item-subtitle>
-          {{ 'netname' in route.inetnum ? route.inetnum.netname[0] : "Sub-allocation" }}
-          {{ "descr" in route.inetnum ? '-' + route.inetnum.descr[0] : "" }}
+          {{
+            "netname" in route.inetnum
+              ? route.inetnum.netname[0]
+              : "Sub-allocation"
+          }}
+          {{ "descr" in route.inetnum ? "-" + route.inetnum.descr[0] : "" }}
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
@@ -43,8 +47,8 @@ export default {
         default:
           return code[0].toLowerCase();
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

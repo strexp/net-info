@@ -16,7 +16,10 @@
         <v-card-actions>
           <v-btn :to="'/path/' + asdata.asn['aut-num'][0]" text>BGP Map</v-btn>
           <v-spacer />
-          <span class="grey--text">Last Updated: {{ new Date(asdata.created * 1e3).toISOString() }}</span>
+          <span class="grey--text"
+            >Last Updated:
+            {{ new Date(asdata.created * 1e3).toISOString() }}</span
+          >
         </v-card-actions>
       </v-card>
 
@@ -66,30 +69,30 @@ export default {
     bogon: false,
     asdata: {
       asn: {
-        "contact-info": {},
+        "contact-info": {}
       },
       routes: {
         ipv4: [],
-        ipv6: [],
-      },
-    },
+        ipv6: []
+      }
+    }
   }),
   components: { Routes, Contact, Bogons },
   watch: {
     $route() {
       this.mounted();
-    },
+    }
   },
   computed: {
     descr() {
       if (this.asdata.asn == {}) return "";
       if (!("remarks" in this.asdata.asn)) return "Not Found";
       var ret = "";
-      this.asdata.asn.remarks.forEach((ln) => {
+      this.asdata.asn.remarks.forEach(ln => {
         ret = ret + ln.trim() + "</br>";
       });
       return ret;
-    },
+    }
   },
   mounted() {
     this.$ajax
@@ -99,15 +102,15 @@ export default {
           this.$route.params.asn +
           ".json"
       )
-      .then((response) => {
+      .then(response => {
         this.asdata = response.data;
         this.loading = false;
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         this.$router.push("/404");
       });
-  },
+  }
 };
 </script>
 

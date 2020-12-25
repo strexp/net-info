@@ -7,7 +7,7 @@ import vuetify from "./plugins/vuetify";
 import VueFlags from "@growthbunker/vueflags";
 
 Vue.use(VueFlags, {
-  iconPath: "/icons/country/",
+  iconPath: "/icons/country/"
 });
 
 Vue.config.productionTip = false;
@@ -22,5 +22,5 @@ new Vue({
   router,
   store,
   vuetify,
-  render: (h) => h(App),
+  render: h => h(App)
 }).$mount("#app");

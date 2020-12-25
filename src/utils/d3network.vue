@@ -93,44 +93,44 @@ export default {
     // node
     nodeSize: {
       type: Number,
-      default: 14,
+      default: 14
     },
     nodeTextKey: {
       type: String,
-      default: "id",
+      default: "id"
     },
     nodeTypeKey: {
       type: String,
-      default: "group",
+      default: "group"
     },
     nodeTextFontSize: {
       type: Number,
-      default: 14,
+      default: 14
     },
     // link
     linkWidth: {
       type: Number,
-      default: 2,
+      default: 2
     },
     showLinkText: {
       type: Boolean,
-      default: false,
+      default: false
     },
     linkTextKey: {
       type: String,
-      default: "value",
+      default: "value"
     },
     linkTypeKey: {
       type: String,
-      default: "type",
+      default: "type"
     },
     linkTextFrontSize: {
       type: Number,
-      default: 10,
+      default: 10
     },
     linkDistance: {
       type: Number,
-      default: 50,
+      default: 50
     },
     // svg
     svgSize: {
@@ -138,31 +138,31 @@ export default {
       default: () => {
         return {
           width: window.innerWidth,
-          height: window.innerHeight,
+          height: window.innerHeight
         };
-      },
+      }
     },
     svgTheme: {
       type: String,
-      default: "light", // dark or light
+      default: "light" // dark or light
     },
     bodyStrength: {
       type: Number,
-      default: -150,
+      default: -150
     },
     // others
     highlightNodes: {
       type: Array,
       default: () => {
         return [];
-      },
-    },
+      }
+    }
   },
   data() {
     return {
       selection: {
         links: [],
-        nodes: [],
+        nodes: []
       },
       pinned: [], // 被订住的节点的下标
       force: null,
@@ -171,9 +171,9 @@ export default {
       linkTextVisible: false,
       linkTextPosition: {
         top: 0,
-        left: 0,
+        left: 0
       },
-      linkTextContent: "",
+      linkTextContent: ""
     };
   },
   computed: {
@@ -181,7 +181,7 @@ export default {
       // 去重
       let nodes = this.nodeList.slice();
       let nodeIds = [];
-      nodes = nodes.filter((node) => {
+      nodes = nodes.filter(node => {
         if (nodeIds.indexOf(node.id) === -1) {
           nodeIds.push(node.id);
           return true;
@@ -200,7 +200,7 @@ export default {
           bgcolor: "white",
           nodeStroke: "white",
           linkStroke: "lightgray",
-          textFill: "black",
+          textFill: "black"
         };
       } else {
         // dark
@@ -208,10 +208,10 @@ export default {
           bgcolor: "black",
           nodeStroke: "white",
           linkStroke: "rgba(200,200,200,0.3)",
-          textFill: "white",
+          textFill: "white"
         };
       }
-    },
+    }
   },
   watch: {
     bodyStrength: function() {
@@ -234,7 +234,7 @@ export default {
         // 所以要使用 $nextTick
         this.initDragTickZoom();
       });
-    },
+    }
   },
   created() {
     this.initData();
@@ -250,7 +250,7 @@ export default {
           "link",
           d3
             .forceLink(this.links)
-            .id((d) => d.id)
+            .id(d => d.id)
             .distance(this.linkDistance)
         )
         .force("charge", d3.forceManyBody().strength(this.bodyStrength)) //The strength of the attraction or repulsion
@@ -273,27 +273,27 @@ export default {
         // 更新连线坐标
         d3.selectAll(".link")
           .data(this.links)
-          .attr("x1", (d) => d.source.x)
-          .attr("y1", (d) => d.source.y)
-          .attr("x2", (d) => d.target.x)
-          .attr("y2", (d) => d.target.y);
+          .attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
         // 更新节点坐标
         d3.selectAll(".node")
           .data(this.nodes)
           //.style("opacity", 0.8)
-          .attr("cx", (d) => d.x)
-          .attr("cy", (d) => d.y);
+          .attr("cx", d => d.x)
+          .attr("cy", d => d.y);
         // 更新文字坐标
         d3.selectAll(".node-text")
           .data(this.nodes)
           .attr("text-anchor", "middle")
-          .attr("x", (d) => d.x)
-          .attr("y", (d) => d.y)
-          .style("opacity", (d) => d.size / 25);
+          .attr("x", d => d.x)
+          .attr("y", d => d.y)
+          .style("opacity", d => d.size / 25);
         d3.selectAll(".link-text")
           .data(this.links)
-          .attr("x", (d) => (d.source.x + d.target.x) / 2)
-          .attr("y", (d) => (d.source.y + d.target.y) / 2);
+          .attr("x", d => (d.source.x + d.target.x) / 2)
+          .attr("y", d => (d.source.y + d.target.y) / 2);
       });
 
       // 初始化 zoom
@@ -385,7 +385,7 @@ export default {
       d3.selectAll(".element").style("opacity", 0.05);
     },
     lightNeibor(node) {
-      this.links.forEach((link) => {
+      this.links.forEach(link => {
         if (link.source.index === node.index) {
           link.selected = "selected";
           this.selection.links.push(link);
@@ -401,22 +401,22 @@ export default {
       });
     },
     lightNode(selectedNode) {
-      this.nodes.forEach((node) => {
+      this.nodes.forEach(node => {
         if (node.index === selectedNode.index) {
           node.showText = true;
         }
       });
     },
     darkenNerbor() {
-      this.links.forEach((link) => {
-        this.selection.links.forEach((selectedLink) => {
+      this.links.forEach(link => {
+        this.selection.links.forEach(selectedLink => {
           if (selectedLink.id === link.id) {
             link.selected = "";
           }
         });
       });
-      this.nodes.forEach((node) => {
-        this.selection.nodes.forEach((selectednode) => {
+      this.nodes.forEach(node => {
+        this.selection.nodes.forEach(selectednode => {
           if (selectednode.id === node.id) {
             node.showText = false;
           }
@@ -462,8 +462,8 @@ export default {
         .on("start", dragstarted)
         .on("drag", dragged)
         .on("end", dragended);
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -48,14 +48,14 @@
 export default {
   data: () => ({
     ipinfo: null,
-    loading: true,
+    loading: true
   }),
   mounted() {
-    this.$ajax.get(process.env.VUE_APP_API_URL + "/myip").then((response) => {
+    this.$ajax.get(process.env.VUE_APP_API_URL + "/myip").then(response => {
       this.ipinfo = response.data;
       this.loading = false;
     });
-  },
+  }
 };
 </script>
 

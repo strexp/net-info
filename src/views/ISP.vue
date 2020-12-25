@@ -62,16 +62,14 @@
 export default {
   data: () => ({
     operator_groups: null,
-    loading: true,
+    loading: true
   }),
   mounted() {
-    this.$ajax
-      .get(process.env.VUE_APP_API_URL + "/isp.json")
-      .then((response) => {
-        this.operator_groups = response.data;
-        this.loading = false;
-      });
-  },
+    this.$ajax.get(process.env.VUE_APP_API_URL + "/isp.json").then(response => {
+      this.operator_groups = response.data;
+      this.loading = false;
+    });
+  }
 };
 </script>
 

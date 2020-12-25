@@ -38,7 +38,7 @@ export default {
     from: null,
     to: null,
     dir: null,
-    show: false,
+    show: false
   }),
   mounted() {
     if ("fromasn" in this.$route.params) {
@@ -58,8 +58,8 @@ export default {
           "/" +
           this.to;
       else this.dir = process.env.VUE_APP_API_URL + "/as_graph/" + this.from;
-    },
-  },
+    }
+  }
 };
 </script>
 

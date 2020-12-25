@@ -80,15 +80,15 @@ export default {
   data: () => ({
     alerts: {
       ipv4: [],
-      ipv6: [],
+      ipv6: []
     },
-    loading: true,
+    loading: true
   }),
   mounted() {
     this.$ajax
       .get(process.env.VUE_APP_API_URL + "/alerts.json")
-      .then((response) => {
-        response.data.roa_data.forEach((alt) => {
+      .then(response => {
+        response.data.roa_data.forEach(alt => {
           if (
             alt.prefix.match(
               /^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$/
@@ -101,7 +101,7 @@ export default {
         });
         this.loading = false;
       });
-  },
+  }
 };
 </script>
 

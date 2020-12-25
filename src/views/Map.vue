@@ -9,8 +9,8 @@ import MapRender from "@/components/Map/MapRender";
 
 export default {
   components: {
-    MapRender,
-  },
+    MapRender
+  }
 };
 </script>
 

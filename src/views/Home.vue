@@ -3,8 +3,13 @@
     <v-row>
       <v-col cols="12">
         <v-card>
-          <v-card-title>Welcome to Strategic Explorations BGP Info Service.</v-card-title>
-          <v-card-subtitle>This system is operated by Network Research Center of Niantic Project China.</v-card-subtitle>
+          <v-card-title
+            >Welcome to Strategic Explorations BGP Info Service.</v-card-title
+          >
+          <v-card-subtitle
+            >This system is operated by Network Research Center of Niantic
+            Project China.</v-card-subtitle
+          >
           <v-card-actions>
             <v-btn href="https://strexp.net" text color="primary">
               <v-icon left>mdi-home</v-icon>HomePage
@@ -20,7 +25,13 @@
         </v-card>
       </v-col>
       <v-col cols="12" sm="3" v-for="i in info.data" :key="i.id">
-        <InfoCard :title="i.title" :num="i.cnt" :color="i.color" :descr="i.desc" :icon="i.icon" />
+        <InfoCard
+          :title="i.title"
+          :num="i.cnt"
+          :color="i.color"
+          :descr="i.desc"
+          :icon="i.icon"
+        />
       </v-col>
       <v-col cols="12" md="6">
         <SelfIP />
@@ -43,9 +54,11 @@ export default {
     SelfIP
   },
   mounted() {
-    this.$ajax.get(process.env.VUE_APP_API_URL + "/summary.json").then(response => {
-      this.info = response.data;
-    });
+    this.$ajax
+      .get(process.env.VUE_APP_API_URL + "/summary.json")
+      .then(response => {
+        this.info = response.data;
+      });
   }
 };
 </script>

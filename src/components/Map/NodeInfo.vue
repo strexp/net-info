@@ -32,7 +32,7 @@
 
 <script>
 export default {
-  props: ["node"],
+  props: ["node"]
 };
 </script>
 

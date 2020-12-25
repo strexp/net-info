@@ -27,8 +27,8 @@ export default {
       if ("e-mail" in contact) return contact["e-mail"][0];
       if ("contact" in contact) return contact["contact"][0];
       return "Unknown Contact";
-    },
-  },
+    }
+  }
 };
 </script>
 

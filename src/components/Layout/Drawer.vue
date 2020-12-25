@@ -57,45 +57,45 @@ export default {
         url: "/",
         icon: "mdi-view-dashboard",
         desc: "Dashboard",
-        type: "all",
+        type: "all"
       },
       {
         url: "/map",
         icon: "mdi-map",
         desc: "Map",
-        type: "dn42",
+        type: "dn42"
       },
       {
         url: "/isp",
         icon: "mdi-network",
         desc: "ISPs",
-        type: "dn42",
+        type: "dn42"
       },
       {
         url: "/alerts",
         icon: "mdi-alert",
         desc: "Alerts",
-        type: "dn42",
+        type: "dn42"
       },
       {
         url: "/path",
         icon: "mdi-graph",
         desc: "Path",
-        type: "dn42",
+        type: "dn42"
       },
       {
         url: "/registry",
         icon: "mdi-book",
         desc: "Registry",
-        type: "dn42",
+        type: "dn42"
       },
       {
         url: "/about",
         icon: "mdi-information",
         desc: "About",
-        type: "all",
-      },
-    ],
+        type: "all"
+      }
+    ]
   }),
   computed: {
     showDrawer: {
@@ -104,9 +104,9 @@ export default {
       },
       set(val) {
         this.$store.commit("setDrawer", val);
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>
 

@@ -23,14 +23,14 @@ export default {
   data: () => ({
     nodes: [],
     edges: [],
-    nodeSelected: null,
+    nodeSelected: null
   }),
   components: {
     network,
-    NodeInfo,
+    NodeInfo
   },
   mounted() {
-    this.$ajax.get("/static/graph.json").then((response) => {
+    this.$ajax.get("/static/graph.json").then(response => {
       this.nodes = response.data.nodes;
       this.edges = response.data.edges;
       for (var i = 0; i < this.nodes.length; ++i) {
@@ -55,7 +55,7 @@ export default {
         targetNode.peers.push({ id: sourceNode.id, label: sourceNode.label });
       }
     });
-  },
+  }
 };
 </script>
 

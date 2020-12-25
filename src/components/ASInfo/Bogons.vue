@@ -19,20 +19,20 @@
 <script>
 export default {
   data: () => ({
-    bogon: false,
+    bogon: false
   }),
   props: ["asn"],
   mounted() {
     this.$ajax
       .get(process.env.VUE_APP_API_URL + "/alerts.json")
-      .then((response) => {
-        response.data.roa_data.forEach((alt) => {
+      .then(response => {
+        response.data.roa_data.forEach(alt => {
           if (this.asn.includes(alt.asn)) {
             this.bogon = true;
           }
         });
       });
-  },
+  }
 };
 </script>
 

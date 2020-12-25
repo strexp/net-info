@@ -18,11 +18,11 @@ export default {
   name: "App",
   components: {
     NavBar,
-    Drawer,
+    Drawer
   },
   data: () => ({
     //
-  }),
+  })
 };
 </script>
 
