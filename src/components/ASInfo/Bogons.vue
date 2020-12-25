@@ -8,7 +8,7 @@
     v-if="bogon"
   >
     <v-row align="center" no-gutters>
-      <v-col class="grow"> AS{{ asn }} announces bogons. </v-col>
+      <v-col class="grow"> {{ asn }} announces bogons. </v-col>
       <v-col class="shrink">
         <v-btn to="/alerts" text>Know More</v-btn>
       </v-col>
