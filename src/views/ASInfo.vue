@@ -16,7 +16,7 @@
         <v-card-actions>
           <v-btn :to="'/path/' + asdata.asn['aut-num'][0]" text>BGP Map</v-btn>
           <v-spacer />
-          <span class="grey--text">Last Updated: {{ asdata.created }}</span>
+          <span class="grey--text">Last Updated: {{ new Date(asdata.created * 1e3).toISOString() }}</span>
         </v-card-actions>
       </v-card>
 
@@ -83,7 +83,7 @@ export default {
   computed: {
     descr() {
       if (this.asdata.asn == {}) return "";
-      if (!("remarks" in this.asdata.asn)) return "";
+      if (!("remarks" in this.asdata.asn)) return "Not Found";
       var ret = "";
       this.asdata.asn.remarks.forEach((ln) => {
         ret = ret + ln.trim() + "</br>";

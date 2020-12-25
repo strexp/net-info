@@ -1,5 +1,5 @@
 <template>
-  <v-card tile v-if="node" class="infocard">
+  <v-card tile v-if="node" class="infocard hidden-sm-and-down">
     <v-card-title>
       {{ node.label }}
     </v-card-title>
@@ -41,7 +41,7 @@ export default {
   position: absolute;
   left: 0px;
   top: 0px;
-  max-width: 20%;
+  max-width: 300px;
 }
 
 .peers-view {

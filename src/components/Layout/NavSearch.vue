@@ -53,7 +53,10 @@ export default {
 
   watch: {
     model() {
-      if (this.model) this.$router.push("/asInfo/" + this.model);
+      if (this.model) {
+        this.search = null;
+        this.$router.push("/asInfo/" + this.model);
+      }
     },
     search() {
       // Items have already been loaded
