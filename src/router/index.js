@@ -7,24 +7,60 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home
+    name: "Dashboard",
+    component: Home,
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
-  }
+    path: "/map",
+    name: "Map",
+    component: () => import("@/views/Map.vue"),
+  },
+  {
+    path: "/isp",
+    name: "ISP",
+    component: () => import("@/views/ISP.vue"),
+  },
+  {
+    path: "/alerts",
+    name: "Alerts",
+    component: () => import("@/views/Alerts.vue"),
+  },
+  {
+    path: "/path",
+    name: "Path",
+    component: () => import("@/views/Path.vue"),
+    children: [
+      {
+        path: ":fromasn",
+        name: "Path Lookup",
+        component: () => import("@/views/Path.vue"),
+        children: [
+          {
+            path: ":toasn",
+            name: "Path Find",
+            component: () => import("@/views/Path.vue"),
+          },
+        ],
+      },
+    ],
+  },
+
+  {
+    path: "/asinfo/:asn",
+    name: "AS Info",
+    component: () => import("@/views/ASInfo.vue"),
+  },
+  {
+    path: "*",
+    name: "404",
+    component: () => import("@/views/404.vue"),
+  },
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes
+  routes,
 });
 
 export default router;

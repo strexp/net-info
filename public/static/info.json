@@ -1,0 +1,26 @@
+[
+    {
+        "cnt": 30,
+        "icon": "mdi-alert",
+        "id": "mdi-alert",
+        "title": "Alerts",
+        "desc": "Route Alerts",
+        "color": "red"
+    },
+    {
+        "id": "asn",
+        "cnt": 114514,
+        "icon": "mdi-network",
+        "title": "ASN",
+        "desc": "Observed ASNs",
+        "color": "info"
+    },
+    {
+        "id": "prefix",
+        "cnt": 1919810,
+        "icon": "mdi-network",
+        "title": "Prefixes",
+        "desc": "Observed Prefixes",
+        "color": "success"
+    }
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Tier 1 Operators",
+    "desc": "Tier 1 operators have centrality more than 0.1.",
+    "data": [
+      {
+        "asn": 1,
+        "label": "TEST1",
+        "community": [],
+        "centrality": "0.0000"
+      },
+      {
+        "asn": 2,
+        "label": "TEST2",
+        "community": [],
+        "centrality": "0.0100"
+      },
+      {
+        "asn": 3,
+        "label": "TEST3",
+        "community": [],
+        "centrality": "0.0300"
+      },
+      {
+        "asn": 4,
+        "label": "TEST4",
+        "community": [],
+        "centrality": "0.0900"
+      },
+      {
+        "asn": 5,
+        "label": "TEST5",
+        "community": [],
+        "centrality": "0.3000"
+      },
+      {
+        "asn": 6,
+        "label": "TEST6",
+        "community": [],
+        "centrality": "0.6000"
+      }
+    ]
+  },
+  {
+    "name": "Tier 2 Operators",
+    "desc": "Tier 1 operators have centrality more than 0.1.",
+    "data": [
+      {
+        "asn": 1,
+        "label": "TEST1",
+        "community": [],
+        "centrality": "0.0000"
+      },
+      {
+        "asn": 2,
+        "label": "TEST2",
+        "community": [],
+        "centrality": "0.0100"
+      },
+      {
+        "asn": 3,
+        "label": "TEST3",
+        "community": [],
+        "centrality": "0.0300"
+      },
+      {
+        "asn": 4,
+        "label": "TEST4",
+        "community": [],
+        "centrality": "0.0900"
+      },
+      {
+        "asn": 5,
+        "label": "TEST5",
+        "community": [],
+        "centrality": "0.3000"
+      },
+      {
+        "asn": 6,
+        "label": "TEST6",
+        "community": [],
+        "centrality": "0.6000"
+      }
+    ]
+  }
+]
