@@ -1,22 +1,22 @@
 <template>
   <v-card tile v-if="node" class="infocard hidden-sm-and-down">
     <v-card-title>
-      {{ node.label }}
+      {{ node.name }}
     </v-card-title>
     <v-card-subtitle>
-      {{ node.name }}
+      {{ node.asn }}
       <br />
       <v-icon small left>mdi-sigma</v-icon>Centrality: {{ node.centrality }}
     </v-card-subtitle>
     <v-divider />
     <v-row no-gutters>
       <v-col>
-        <v-btn :to="'/asInfo/' + node.name" block tile text
+        <v-btn :to="'/asInfo/' + node.asn" block tile text
           ><v-icon color="grey" left>mdi-information</v-icon>Info</v-btn
         >
       </v-col>
       <v-col>
-        <v-btn :to="'/path/' + node.name" block tile text
+        <v-btn :to="'/path/' + node.asn" block tile text
           ><v-icon color="grey" left>mdi-graph</v-icon>Graph</v-btn
         >
       </v-col>

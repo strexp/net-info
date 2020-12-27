@@ -67,7 +67,7 @@
               :fill="theme.textFill"
               :font-size="node.size * nodeTextFontSize"
             >
-              {{ node.label }}
+              {{ node.name }}
             </text>
           </g>
           <g></g>

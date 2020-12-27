@@ -57,8 +57,8 @@ export default {
               var targetNode = this.nodes[n];
           }
           if (!sourceNode || !targetNode) continue;
-          sourceNode.peers.push({ id: targetNode.id, label: targetNode.label });
-          targetNode.peers.push({ id: sourceNode.id, label: sourceNode.label });
+          sourceNode.peers.push({ id: targetNode.id, label: targetNode.name });
+          targetNode.peers.push({ id: sourceNode.id, label: sourceNode.name });
         }
       });
   }
