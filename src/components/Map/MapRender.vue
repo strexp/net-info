@@ -31,7 +31,11 @@ export default {
   },
   mounted() {
     this.$ajax
-      .get("/static/graph.json?rnd=" + Math.floor(Date.now() / 600000))
+      .get(
+        process.env.VUE_APP_API_URL +
+          "/graph.json?rnd=" +
+          Math.floor(Date.now() / 600000)
+      )
       .then(response => {
         this.nodes = response.data.nodes;
         this.edges = response.data.edges;
