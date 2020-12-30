@@ -91,7 +91,6 @@ export default {
           sprite.strokeWidth = "1";
           sprite.strokeColor = "#000000";
           sprite.position.z = node.size;
-          console.log(sprite);
           return sprite;
         })
         .nodeThreeObjectExtend(true)
