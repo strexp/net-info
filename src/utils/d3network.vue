@@ -1,10 +1,12 @@
 <template>
-  <div id="container" />
+  <div id="map">
+    <div id="container" />
+  </div>
 </template>
 
 <script>
 import Bus from "@/bus";
-
+import * as Stats from "stats.js";
 import ForceGraph3D from "3d-force-graph";
 import SpriteText from "three-spritetext";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
@@ -35,6 +37,7 @@ export default {
   data: () => ({
     Graph: null,
     highlightNodes: null,
+    stats: new Stats(),
     filters: {
       bloomPass: null,
       fxaaPass: null
@@ -47,6 +50,12 @@ export default {
     Bus.$on("Focus", () => {
       this.focusSelect();
     });
+    this.stats.showPanel(0);
+    this.$store.commit("setDrawer", false);
+    this.stats.domElement.style.bottom = "0px";
+    this.stats.domElement.style.top = "";
+    this.stats.domElement.className += "hidden-sm-and-down";
+    document.getElementById("map").appendChild(this.stats.dom);
   },
   methods: {
     refreshGraph: function() {
@@ -83,6 +92,10 @@ export default {
         .enableNavigationControls(true)
         .nodeRelSize(1)
         .backgroundColor("#000000")
+        .onEngineTick(() => {
+          this.stats.end();
+          this.stats.begin();
+        })
         .nodeThreeObject(node => {
           const sprite = new SpriteText(node.name);
           sprite.material.depthWrite = false;
@@ -150,5 +163,3 @@ export default {
   }
 };
 </script>
-
-<style scoped></style>
