@@ -23,33 +23,73 @@ export default {
     linkList() {
       if (!this.Graph) this.genView();
     },
+    showBg(val) {
+      if (!val) this.Graph.scene().background = new Color(0x000000);
+      else
+        new CubeTextureLoader().load(this.ldrUrls, bg => {
+          this.Graph.scene().background = bg;
+        });
+    },
+    showGlow(val) {
+      if (!val)
+        this.Graph.postProcessingComposer().removePass(this.filters.bloomPass);
+      else this.Graph.postProcessingComposer().addPass(this.filters.bloomPass);
+    },
     selected() {
       this.highlightNodes.clear();
+      this.highlight2Nodes.clear();
       if (this.selected) {
         this.highlightNodes.add(this.selected);
-        this.selected.peers.forEach((neighbor) =>
-          this.highlightNodes.add(neighbor)
-        );
+        this.selected.peers.forEach(neighbor => {
+          this.highlightNodes.add(neighbor);
+          if (this.showHop2)
+            neighbor.peers.forEach(neighbor2 =>
+              this.highlight2Nodes.add(neighbor2)
+            );
+        });
       }
       this.refreshGraph();
-    },
+    }
   },
   data: () => ({
     Graph: null,
-    highlightNodes: null,
+    highlightNodes: new Set(),
+    highlight2Nodes: new Set(),
     stats: new Stats(),
+    showHop2: true,
+    showBg: true,
+    showGlow: true,
+    ldrUrls: [
+      "/static/skybox/right.png",
+      "/static/skybox/left.png",
+      "/static/skybox/top.png",
+      "/static/skybox/bottom.png",
+      "/static/skybox/front.png",
+      "/static/skybox/back.png"
+    ],
     filters: {
       bloomPass: null,
       fxaaPass: null,
-      cubeTexturePass: null,
-    },
+      cubeTexturePass: null
+    }
   }),
   mounted() {
-    Bus.$on("Search", (payload) => {
-      this.selected = this.nodeList.find((n) => n.asn === payload);
+    Bus.$on("Search", payload => {
+      var selectedNode = this.nodeList.find(n => n.asn === payload);
+      if (selectedNode) this.updateSelected(selectedNode);
     });
     Bus.$on("Focus", () => {
       this.focusSelect();
+    });
+    Bus.$on("SwitchHop2", value => {
+      this.selected = null;
+      this.showHop2 = value;
+    });
+    Bus.$on("SwitchBg", value => {
+      this.showBg = value;
+    });
+    Bus.$on("SwitchGlow", value => {
+      this.showGlow = value;
     });
     this.stats.showPanel(0);
     this.$store.commit("setDrawer", false);
@@ -75,7 +115,7 @@ export default {
         {
           x: this.selected.x * 2,
           y: this.selected.y * 2,
-          z: this.selected.z * 2,
+          z: this.selected.z * 2
         }, // new position
         this.selected, // lookAt ({ x, y, z })
         3000 // ms transition duration
@@ -87,9 +127,10 @@ export default {
       this.Graph(document.getElementById("container"))
         .graphData({
           nodes: this.nodeList,
-          links: this.linkList,
+          links: this.linkList
         })
         .nodeOpacity(1)
+        .linkOpacity(0.3)
         .enableNavigationControls(true)
         .nodeLabel("")
         .nodeResolution(32)
@@ -99,11 +140,11 @@ export default {
           this.stats.end();
           this.stats.begin();
         })
-        .nodeThreeObject((node) => {
+        .nodeThreeObject(node => {
           const sprite = new SpriteText(node.name);
           sprite.material.depthWrite = false;
-          sprite.color = "#ffffff";
-          sprite.textHeight = node.size;
+          sprite.color = "#999999";
+          sprite.textHeight = node.size * 0.8;
           sprite.strokeWidth = "1";
           sprite.strokeColor = "#000000";
           sprite.position.z = node.size;
@@ -116,20 +157,22 @@ export default {
           return sprite;
         })
         .nodeThreeObjectExtend(true)
-        .nodeColor((node) =>
-          this.highlightNodes.has(node)
-            ? node === this.selected
-              ? "rgba(0,255,255," + node.val / 10 + ")"
-              : "rgba(255,150,0," + node.val / 20 + ")"
-            : "rgba(255,255,255," + node.val / 50 + ")"
-        )
+        .nodeColor(node => {
+          if (node === this.selected)
+            return "rgba(0,255,255," + node.val / 10 + ")";
+          if (this.highlightNodes.has(node))
+            return "rgba(255,150,0," + node.val / 30 + ")";
+          if (this.highlight2Nodes.has(node))
+            return "rgba(255,30,0," + node.val / 20 + ")";
+          return "rgba(150,150,150," + node.val / 30 + ")";
+        })
         .onBackgroundClick(() => {
           this.updateSelected(null);
         })
         .onLinkClick(() => {
           this.updateSelected(null);
         })
-        .onNodeClick((node) => {
+        .onNodeClick(node => {
           // no state change
           if (
             (!node && !this.highlightNodes.size) ||
@@ -155,26 +198,18 @@ export default {
       this.filters.fxaaPass.material.uniforms["resolution"].value.y =
         1 / (container.offsetHeight * pixelRatio);
 
-      this.filters.bloomPass.strength = 0.5;
-      this.filters.bloomPass.radius = 0.7;
-      this.filters.bloomPass.threshold = 0.001;
+      this.filters.bloomPass.strength = 0.8;
+      this.filters.bloomPass.radius = 0.1;
+      this.filters.bloomPass.threshold = 0.3;
 
-      const ldrUrls = [
-        "/static/skybox/right.png",
-        "/static/skybox/left.png",
-        "/static/skybox/top.png",
-        "/static/skybox/bottom.png",
-        "/static/skybox/front.png",
-        "/static/skybox/back.png",
-      ];
       this.Graph.scene().background = new Color(0x000000);
-      new CubeTextureLoader().load(ldrUrls, (bg) => {
+      new CubeTextureLoader().load(this.ldrUrls, bg => {
         this.Graph.scene().background = bg;
       });
 
       this.Graph.postProcessingComposer().addPass(this.filters.bloomPass);
       this.Graph.postProcessingComposer().addPass(this.filters.fxaaPass);
-    },
-  },
+    }
+  }
 };
 </script>

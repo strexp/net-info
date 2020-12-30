@@ -29,6 +29,22 @@
         {{ p.name }}<br />
       </span>
     </v-card-text>
+    <v-divider />
+    <v-card-actions>
+      <v-btn icon @click="switchHop2"
+        ><v-icon>{{
+          showHop2 ? "mdi-graph" : "mdi-graph-outline"
+        }}</v-icon></v-btn
+      >
+      <v-btn icon @click="switchBg"
+        ><v-icon>{{ showBg ? "mdi-earth" : "mdi-earth-off" }}</v-icon></v-btn
+      >
+      <v-btn icon @click="switchGlow"
+        ><v-icon>{{
+          showGlow ? "mdi-lightbulb-on" : "mdi-lightbulb-off"
+        }}</v-icon></v-btn
+      >
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -37,6 +53,11 @@ import Bus from "@/bus";
 
 export default {
   props: ["node"],
+  data: () => ({
+    showHop2: true,
+    showBg: true,
+    showGlow: true
+  }),
   methods: {
     focus() {
       Bus.$emit("Focus");
@@ -44,6 +65,18 @@ export default {
     selectPeer(peer) {
       this.node = peer;
       this.$emit("update:node", this.node);
+    },
+    switchHop2() {
+      this.showHop2 = !this.showHop2;
+      Bus.$emit("SwitchHop2", this.showHop2);
+    },
+    switchBg() {
+      this.showBg = !this.showBg;
+      Bus.$emit("SwitchBg", this.showBg);
+    },
+    switchGlow() {
+      this.showGlow = !this.showGlow;
+      Bus.$emit("SwitchGlow", this.showGlow);
     }
   }
 };
