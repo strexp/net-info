@@ -91,6 +91,12 @@ export default {
           sprite.strokeWidth = "1";
           sprite.strokeColor = "#000000";
           sprite.position.z = node.size;
+          sprite.renderOrder = 999;
+          sprite.material.depthTest = false;
+          sprite.material.depthWrite = false;
+          sprite.onBeforeRender = function(renderer) {
+            renderer.clearDepth();
+          };
           return sprite;
         })
         .nodeThreeObjectExtend(true)
