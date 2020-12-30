@@ -12,16 +12,16 @@ import SpriteText from "three-spritetext";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
-import { Color, Vector2 } from "three/build/three.min.js";
+import { Vector2, CubeTextureLoader } from "three/build/three.min.js";
 
 export default {
   props: ["nodeList", "linkList", "selected"],
   watch: {
     nodeList() {
-      this.genView();
+      if (!this.Graph) this.genView();
     },
     linkList() {
-      this.genView();
+      if (!this.Graph) this.genView();
     },
     selected() {
       this.highlightNodes.clear();
@@ -40,7 +40,8 @@ export default {
     stats: new Stats(),
     filters: {
       bloomPass: null,
-      fxaaPass: null
+      fxaaPass: null,
+      cubeTexturePass: null
     }
   }),
   mounted() {
@@ -82,7 +83,7 @@ export default {
     },
     genView: function() {
       this.highlightNodes = new Set();
-      this.Graph = ForceGraph3D();
+      this.Graph = ForceGraph3D({ antialias: true, alpha: true });
       this.Graph(document.getElementById("container"))
         .graphData({
           nodes: this.nodeList,
@@ -90,6 +91,8 @@ export default {
         })
         .nodeOpacity(1)
         .enableNavigationControls(true)
+        .nodeLabel("")
+        .nodeResolution(32)
         .nodeRelSize(1)
         .backgroundColor("#000000")
         .onEngineTick(() => {
@@ -156,9 +159,21 @@ export default {
       this.filters.bloomPass.radius = 0.7;
       this.filters.bloomPass.threshold = 0.001;
 
+      const ldrUrls = [
+        "/static/skybox/right.png",
+        "/static/skybox/left.png",
+        "/static/skybox/top.png",
+        "/static/skybox/bottom.png",
+        "/static/skybox/front.png",
+        "/static/skybox/back.png"
+      ];
+      new CubeTextureLoader().load(ldrUrls, bg => {
+        this.Graph.scene().background = bg;
+      });
+
       this.Graph.postProcessingComposer().addPass(this.filters.bloomPass);
       this.Graph.postProcessingComposer().addPass(this.filters.fxaaPass);
-      this.Graph.scene().background = new Color(0x000000);
+      //this.Graph.scene().background = new Color(0x000000);
     }
   }
 };
