@@ -6,6 +6,7 @@
 import Bus from "@/bus";
 
 import ForceGraph3D from "3d-force-graph";
+import SpriteText from "three-spritetext";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
@@ -24,24 +25,27 @@ export default {
       this.highlightNodes.clear();
       if (this.selected) {
         this.highlightNodes.add(this.selected);
-        this.selected.peers.forEach((neighbor) =>
+        this.selected.peers.forEach(neighbor =>
           this.highlightNodes.add(neighbor)
         );
       }
       this.refreshGraph();
-    },
+    }
   },
   data: () => ({
     Graph: null,
     highlightNodes: null,
     filters: {
       bloomPass: null,
-      fxaaPass: null,
-    },
+      fxaaPass: null
+    }
   }),
   mounted() {
-    Bus.$on("Search", (payload) => {
-      this.selected = this.nodeList.find((n) => n.asn === payload);
+    Bus.$on("Search", payload => {
+      this.selected = this.nodeList.find(n => n.asn === payload);
+    });
+    Bus.$on("Focus", () => {
+      this.focusSelect();
     });
   },
   methods: {
@@ -56,24 +60,47 @@ export default {
       this.selected = val;
       this.$emit("update:selected", this.selected);
     },
+    focusSelect() {
+      this.Graph.cameraPosition(
+        {
+          x: this.selected.x * 2,
+          y: this.selected.y * 2,
+          z: this.selected.z * 2
+        }, // new position
+        this.selected, // lookAt ({ x, y, z })
+        3000 // ms transition duration
+      );
+    },
     genView: function() {
       this.highlightNodes = new Set();
       this.Graph = ForceGraph3D();
       this.Graph(document.getElementById("container"))
         .graphData({
           nodes: this.nodeList,
-          links: this.linkList,
+          links: this.linkList
         })
         .nodeOpacity(1)
         .enableNavigationControls(true)
         .nodeRelSize(1)
         .backgroundColor("#000000")
-        .nodeColor((node) =>
+        .nodeThreeObject(node => {
+          const sprite = new SpriteText(node.name);
+          sprite.material.depthWrite = false;
+          sprite.color = "#ffffff";
+          sprite.textHeight = node.size;
+          sprite.strokeWidth = "1";
+          sprite.strokeColor = "#000000";
+          sprite.position.z = node.size;
+          console.log(sprite);
+          return sprite;
+        })
+        .nodeThreeObjectExtend(true)
+        .nodeColor(node =>
           this.highlightNodes.has(node)
             ? node === this.selected
               ? "rgba(0,255,255," + node.val / 10 + ")"
               : "rgba(255,150,0," + node.val / 20 + ")"
-            : "rgba(255,255,255," + node.val / 40 + ")"
+            : "rgba(255,255,255," + node.val / 50 + ")"
         )
         .onBackgroundClick(() => {
           this.updateSelected(null);
@@ -81,7 +108,7 @@ export default {
         .onLinkClick(() => {
           this.updateSelected(null);
         })
-        .onNodeClick((node) => {
+        .onNodeClick(node => {
           // no state change
           if (
             (!node && !this.highlightNodes.size) ||
@@ -114,8 +141,8 @@ export default {
       this.Graph.postProcessingComposer().addPass(this.filters.bloomPass);
       this.Graph.postProcessingComposer().addPass(this.filters.fxaaPass);
       this.Graph.scene().background = new Color(0x000000);
-    },
-  },
+    }
+  }
 };
 </script>
 

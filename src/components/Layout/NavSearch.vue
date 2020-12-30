@@ -51,12 +51,15 @@ export default {
     isLoading: false,
     items: [],
     model: null,
-    search: null,
+    search: null
   }),
   methods: {
     customFilter(item, queryText) {
-      return item.asn.includes(queryText) || item.name.includes(queryText);
-    },
+      return (
+        item.asn.toLowerCase().includes(queryText.toLowerCase()) ||
+        item.name.toLowerCase().includes(queryText.toLowerCase())
+      );
+    }
   },
   watch: {
     model() {
@@ -76,19 +79,19 @@ export default {
 
       // Lazily load input items
       fetch(process.env.VUE_APP_API_URL + "/isp.json")
-        .then((res) => res.clone().json())
-        .then((res) => {
+        .then(res => res.clone().json())
+        .then(res => {
           this.items = [];
-          res.forEach((group) => {
+          res.forEach(group => {
             this.items = this.items.concat(group.data);
           });
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         })
         .finally(() => (this.isLoading = false));
-    },
-  },
+    }
+  }
 };
 </script>
 

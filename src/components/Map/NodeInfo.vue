@@ -4,7 +4,7 @@
       {{ node.name }}
     </v-card-title>
     <v-card-subtitle>
-      {{ node.asn }}
+      {{ node.asn }} <v-icon small @click="focus">mdi-location-enter</v-icon>
       <br />
       <v-icon small left>mdi-sigma</v-icon>Centrality: {{ node.centrality }}
     </v-card-subtitle>
@@ -33,21 +33,26 @@
 </template>
 
 <script>
+import Bus from "@/bus";
+
 export default {
   props: ["node"],
   methods: {
+    focus() {
+      Bus.$emit("Focus");
+    },
     selectPeer(peer) {
       this.node = peer;
       this.$emit("update:node", this.node);
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .infocard {
   position: absolute;
-  left: 0px;
+  right: 0px;
   top: 0px;
   max-width: 300px;
 }

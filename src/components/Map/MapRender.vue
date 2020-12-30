@@ -19,11 +19,11 @@ export default {
   data: () => ({
     nodes: [],
     edges: [],
-    nodeSelected: null,
+    nodeSelected: null
   }),
   components: {
     network,
-    NodeInfo,
+    NodeInfo
   },
   mounted() {
     this.$ajax
@@ -32,7 +32,7 @@ export default {
           "/graph.json?rnd=" +
           Math.floor(Date.now() / 600000)
       )
-      .then((response) => {
+      .then(response => {
         this.nodes = response.data.nodes;
         this.edges = response.data.edges;
         for (var i = 0; i < this.nodes.length; ++i) {
@@ -60,7 +60,7 @@ export default {
           targetNode.peers.push(sourceNode);
         }
       });
-  },
+  }
 };
 </script>
 

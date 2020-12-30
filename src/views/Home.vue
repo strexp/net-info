@@ -47,11 +47,11 @@ import SelfIP from "@/components/Home/SelfIP";
 export default {
   name: "Home",
   data: () => ({
-    info: [],
+    info: []
   }),
   components: {
     InfoCard,
-    SelfIP,
+    SelfIP
   },
   mounted() {
     this.$ajax
@@ -60,9 +60,9 @@ export default {
           "/summary.json?rnd=" +
           Math.floor(Date.now() / 600000)
       )
-      .then((response) => {
+      .then(response => {
         this.info = response.data;
       });
-  },
+  }
 };
 </script>
