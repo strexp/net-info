@@ -12,7 +12,7 @@ import SpriteText from "three-spritetext";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
-import { Vector2, CubeTextureLoader } from "three/build/three.min.js";
+import { Color, Vector2, CubeTextureLoader } from "three/build/three.min.js";
 
 export default {
   props: ["nodeList", "linkList", "selected"],
@@ -27,12 +27,12 @@ export default {
       this.highlightNodes.clear();
       if (this.selected) {
         this.highlightNodes.add(this.selected);
-        this.selected.peers.forEach(neighbor =>
+        this.selected.peers.forEach((neighbor) =>
           this.highlightNodes.add(neighbor)
         );
       }
       this.refreshGraph();
-    }
+    },
   },
   data: () => ({
     Graph: null,
@@ -41,12 +41,12 @@ export default {
     filters: {
       bloomPass: null,
       fxaaPass: null,
-      cubeTexturePass: null
-    }
+      cubeTexturePass: null,
+    },
   }),
   mounted() {
-    Bus.$on("Search", payload => {
-      this.selected = this.nodeList.find(n => n.asn === payload);
+    Bus.$on("Search", (payload) => {
+      this.selected = this.nodeList.find((n) => n.asn === payload);
     });
     Bus.$on("Focus", () => {
       this.focusSelect();
@@ -75,7 +75,7 @@ export default {
         {
           x: this.selected.x * 2,
           y: this.selected.y * 2,
-          z: this.selected.z * 2
+          z: this.selected.z * 2,
         }, // new position
         this.selected, // lookAt ({ x, y, z })
         3000 // ms transition duration
@@ -87,7 +87,7 @@ export default {
       this.Graph(document.getElementById("container"))
         .graphData({
           nodes: this.nodeList,
-          links: this.linkList
+          links: this.linkList,
         })
         .nodeOpacity(1)
         .enableNavigationControls(true)
@@ -99,7 +99,7 @@ export default {
           this.stats.end();
           this.stats.begin();
         })
-        .nodeThreeObject(node => {
+        .nodeThreeObject((node) => {
           const sprite = new SpriteText(node.name);
           sprite.material.depthWrite = false;
           sprite.color = "#ffffff";
@@ -116,7 +116,7 @@ export default {
           return sprite;
         })
         .nodeThreeObjectExtend(true)
-        .nodeColor(node =>
+        .nodeColor((node) =>
           this.highlightNodes.has(node)
             ? node === this.selected
               ? "rgba(0,255,255," + node.val / 10 + ")"
@@ -129,7 +129,7 @@ export default {
         .onLinkClick(() => {
           this.updateSelected(null);
         })
-        .onNodeClick(node => {
+        .onNodeClick((node) => {
           // no state change
           if (
             (!node && !this.highlightNodes.size) ||
@@ -165,16 +165,16 @@ export default {
         "/static/skybox/top.png",
         "/static/skybox/bottom.png",
         "/static/skybox/front.png",
-        "/static/skybox/back.png"
+        "/static/skybox/back.png",
       ];
-      new CubeTextureLoader().load(ldrUrls, bg => {
+      this.Graph.scene().background = new Color(0x000000);
+      new CubeTextureLoader().load(ldrUrls, (bg) => {
         this.Graph.scene().background = bg;
       });
 
       this.Graph.postProcessingComposer().addPass(this.filters.bloomPass);
       this.Graph.postProcessingComposer().addPass(this.filters.fxaaPass);
-      //this.Graph.scene().background = new Color(0x000000);
-    }
-  }
+    },
+  },
 };
 </script>
