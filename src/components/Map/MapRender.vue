@@ -4,14 +4,10 @@
       <network
         :nodeList="nodes"
         :linkList="edges"
-        :linkDistance="150"
-        :linkWidth="1"
-        :nodeTextFontSize="0.6"
-        :svgTheme="$vuetify.theme.dark ? 'dark' : 'light'"
         :selected.sync="nodeSelected"
       ></network>
     </div>
-    <NodeInfo :node="nodeSelected" />
+    <NodeInfo :node.sync="nodeSelected" />
   </div>
 </template>
 
@@ -23,11 +19,11 @@ export default {
   data: () => ({
     nodes: [],
     edges: [],
-    nodeSelected: null
+    nodeSelected: null,
   }),
   components: {
     network,
-    NodeInfo
+    NodeInfo,
   },
   mounted() {
     this.$ajax
@@ -36,13 +32,14 @@ export default {
           "/graph.json?rnd=" +
           Math.floor(Date.now() / 600000)
       )
-      .then(response => {
+      .then((response) => {
         this.nodes = response.data.nodes;
         this.edges = response.data.edges;
         for (var i = 0; i < this.nodes.length; ++i) {
           var node = this.nodes[i];
           node.id = parseInt(node.id);
-          node.size = node.size * 5;
+          //node.label = node.asn;
+          node.val = node.size * 40 - 60;
           node.peers = [];
         }
         for (i = 0; i < this.edges.length; ++i) {
@@ -53,15 +50,17 @@ export default {
           for (var n = 0; n < this.nodes.length; ++n) {
             if (this.nodes[n].id == edge.sourceID) {
               var sourceNode = this.nodes[n];
-            } else if (this.nodes[n].id == edge.targetID)
+            } else if (this.nodes[n].id == edge.targetID) {
               var targetNode = this.nodes[n];
+            }
           }
           if (!sourceNode || !targetNode) continue;
-          sourceNode.peers.push({ id: targetNode.id, label: targetNode.name });
-          targetNode.peers.push({ id: sourceNode.id, label: sourceNode.name });
+          //sourceNode.peers.push({ id: targetNode.id, label: targetNode.name });
+          sourceNode.peers.push(targetNode);
+          targetNode.peers.push(sourceNode);
         }
       });
-  }
+  },
 };
 </script>
 

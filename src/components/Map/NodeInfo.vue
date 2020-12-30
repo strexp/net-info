@@ -25,14 +25,22 @@
     <v-card-text class="peers-view">
       <b>Peers: {{ node.peers.length }}</b
       ><br />
-      <span v-for="p in node.peers" :key="p.id"> {{ p.label }}<br /> </span>
+      <span @click="selectPeer(p)" v-for="p in node.peers" :key="p.id">
+        {{ p.name }}<br />
+      </span>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
 export default {
-  props: ["node"]
+  props: ["node"],
+  methods: {
+    selectPeer(peer) {
+      this.node = peer;
+      this.$emit("update:node", this.node);
+    },
+  },
 };
 </script>
 

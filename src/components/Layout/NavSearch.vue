@@ -4,6 +4,7 @@
     :items="items"
     :loading="isLoading"
     :search-input.sync="search"
+    :filter="customFilter"
     clearable
     hide-details
     hide-selected
@@ -43,19 +44,28 @@
 </template>
 
 <script>
+import Bus from "@/bus";
+
 export default {
   data: () => ({
     isLoading: false,
     items: [],
     model: null,
-    search: null
+    search: null,
   }),
-
+  methods: {
+    customFilter(item, queryText) {
+      return item.asn.includes(queryText) || item.name.includes(queryText);
+    },
+  },
   watch: {
     model() {
       if (this.model) {
+        if (this.$route.name == "Map") {
+          Bus.$emit("Search", this.model);
+        } else this.$router.push("/asinfo/" + this.model);
         this.search = null;
-        this.$router.push("/asInfo/" + this.model);
+        this.model = null;
       }
     },
     search() {
@@ -66,19 +76,19 @@ export default {
 
       // Lazily load input items
       fetch(process.env.VUE_APP_API_URL + "/isp.json")
-        .then(res => res.clone().json())
-        .then(res => {
+        .then((res) => res.clone().json())
+        .then((res) => {
           this.items = [];
-          res.forEach(group => {
+          res.forEach((group) => {
             this.items = this.items.concat(group.data);
           });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         })
         .finally(() => (this.isLoading = false));
-    }
-  }
+    },
+  },
 };
 </script>
 
