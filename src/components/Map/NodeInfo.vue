@@ -44,6 +44,13 @@
           showGlow ? "mdi-lightbulb-on" : "mdi-lightbulb-off"
         }}</v-icon></v-btn
       >
+      <v-btn icon @click="switchText"
+        ><v-icon>{{
+          showText
+            ? "mdi-format-text-variant"
+            : "mdi-format-text-variant-outline"
+        }}</v-icon></v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
@@ -56,7 +63,8 @@ export default {
   data: () => ({
     showHop2: true,
     showBg: true,
-    showGlow: true
+    showGlow: true,
+    showText: true
   }),
   methods: {
     focus() {
@@ -77,6 +85,10 @@ export default {
     switchGlow() {
       this.showGlow = !this.showGlow;
       Bus.$emit("SwitchGlow", this.showGlow);
+    },
+    switchText() {
+      this.showText = !this.showText;
+      Bus.$emit("SwitchText", this.showText);
     }
   }
 };

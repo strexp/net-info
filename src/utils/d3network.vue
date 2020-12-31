@@ -35,6 +35,31 @@ export default {
         this.Graph.postProcessingComposer().removePass(this.filters.bloomPass);
       else this.Graph.postProcessingComposer().addPass(this.filters.bloomPass);
     },
+    showText(val) {
+      if (!val) {
+        this.Graph.nodeThreeObject(() => {
+          return null;
+        }).nodeLabel(node => node.name);
+      } else {
+        this.Graph.nodeThreeObject(node => {
+          const sprite = new SpriteText(node.name);
+          sprite.material.depthWrite = false;
+          sprite.color = "#999999";
+          sprite.textHeight = node.size * 0.8;
+          sprite.strokeWidth = "1";
+          sprite.strokeColor = "#000000";
+          sprite.position.z = node.size;
+          sprite.renderOrder = 999;
+          sprite.material.depthTest = false;
+          sprite.material.depthWrite = false;
+          sprite.onBeforeRender = function(renderer) {
+            renderer.clearDepth();
+          };
+          return sprite;
+        }).nodeLabel("");
+      }
+      this.refreshGraph();
+    },
     selected() {
       this.highlightNodes.clear();
       this.highlight2Nodes.clear();
@@ -59,6 +84,7 @@ export default {
     showHop2: true,
     showBg: true,
     showGlow: true,
+    showText: true,
     ldrUrls: [
       "/static/skybox/right.png",
       "/static/skybox/left.png",
@@ -90,6 +116,9 @@ export default {
     });
     Bus.$on("SwitchGlow", value => {
       this.showGlow = value;
+    });
+    Bus.$on("SwitchText", value => {
+      this.showText = value;
     });
     this.stats.showPanel(0);
     this.$store.commit("setDrawer", false);
