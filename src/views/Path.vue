@@ -20,8 +20,11 @@
       </v-card-text>
       <v-divider />
       <v-card-actions>
+        <v-checkbox v-model="loose" label="Loose Layout" />
         <v-spacer />
-        <v-btn color="primary" @click="search">Search!</v-btn>
+        <v-btn color="primary" large @click="search"
+          ><v-icon>mdi-search-web</v-icon>Search!</v-btn
+        >
       </v-card-actions>
     </v-card>
     <v-card class="mt-6" v-if="show">
@@ -38,7 +41,8 @@ export default {
     from: null,
     to: null,
     dir: null,
-    show: false
+    show: false,
+    loose: false
   }),
   mounted() {
     if ("fromasn" in this.$route.params) {
@@ -57,7 +61,12 @@ export default {
           this.from +
           "/" +
           this.to;
-      else this.dir = process.env.VUE_APP_API_URL + "/as_graph/" + this.from;
+      else
+        this.dir =
+          process.env.VUE_APP_API_URL +
+          "/as_graph/" +
+          this.from +
+          (this.loose ? "?loose" : "");
     }
   }
 };

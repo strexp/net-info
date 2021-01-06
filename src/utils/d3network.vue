@@ -12,7 +12,12 @@ import SpriteText from "three-spritetext";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
-import { Color, Vector2, CubeTextureLoader } from "three/build/three.min.js";
+import {
+  Object3D,
+  Color,
+  Vector2,
+  CubeTextureLoader
+} from "three/build/three.min.js";
 
 export default {
   props: ["nodeList", "linkList", "selected"],
@@ -170,20 +175,17 @@ export default {
           this.stats.begin();
         })
         .nodeThreeObject(node => {
+          const group = new Object3D();
           const sprite = new SpriteText(node.name);
           sprite.material.depthWrite = false;
           sprite.color = "#999999";
-          sprite.textHeight = node.size * 0.8;
+          sprite.textHeight = node.size * 0.7;
           sprite.strokeWidth = "1";
           sprite.strokeColor = "#000000";
-          sprite.position.z = node.size;
           sprite.renderOrder = 999;
           sprite.material.depthTest = false;
-          sprite.material.depthWrite = false;
-          sprite.onBeforeRender = function(renderer) {
-            renderer.clearDepth();
-          };
-          return sprite;
+          group.add(sprite);
+          return group;
         })
         .nodeThreeObjectExtend(true)
         .nodeColor(node => {
