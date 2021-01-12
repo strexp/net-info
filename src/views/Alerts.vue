@@ -10,8 +10,8 @@
       <div class="title">
         The following alerts is for reference only.
       </div>
-      All data comes from the statistics of Niantic Network (AS4242421331) on
-      NYC1 node, which cannot be guaranteed to be accurate and comprehensive.
+      All data comes from the statistics of Global Route Collector (GRC) of
+      burble.dn42, which cannot be guaranteed to be fully accurate.
     </v-alert>
     <v-row no-gutters>
       <v-col cols="12" md="6">
