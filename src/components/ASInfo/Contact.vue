@@ -13,7 +13,14 @@
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action v-if="'pgp-fingerprint' in contact">
-        <v-icon>mdi-lock</v-icon>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon v-bind="attrs" v-on="on" @click="copykey">
+              <v-icon>mdi-lock</v-icon>
+            </v-btn>
+          </template>
+          <span>PGP / SSH Key</span>
+        </v-tooltip>
       </v-list-item-action>
     </v-list-item>
   </v-list>
@@ -23,6 +30,7 @@
 export default {
   props: ["contact"],
   methods: {
+    copykey() {},
     getContact(contact) {
       if ("e-mail" in contact) return contact["e-mail"][0];
       if ("contact" in contact) return contact["contact"][0];

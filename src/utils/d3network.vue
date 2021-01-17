@@ -25,9 +25,9 @@ export default {
     nodeList() {
       if (!this.Graph) this.genView();
     },
-    linkList() {
-      if (!this.Graph) this.genView();
-    },
+    // linkList() {
+    //   if (!this.Graph) this.genView();
+    // },
     showBg(val) {
       if (!val) this.Graph.scene().background = new Color(0x000000);
       else
