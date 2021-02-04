@@ -51,6 +51,10 @@
             : "mdi-format-text-variant-outline"
         }}</v-icon></v-btn
       >
+
+      <v-btn icon @click="switchBlur"
+        ><v-icon>{{ showBlur ? "mdi-blur" : "mdi-blur-off" }}</v-icon></v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
@@ -64,7 +68,8 @@ export default {
     showHop2: true,
     showBg: true,
     showGlow: true,
-    showText: true
+    showText: true,
+    showBlur: false
   }),
   methods: {
     focus() {
@@ -89,6 +94,10 @@ export default {
     switchText() {
       this.showText = !this.showText;
       Bus.$emit("SwitchText", this.showText);
+    },
+    switchBlur() {
+      this.showBlur = !this.showBlur;
+      Bus.$emit("SwitchBlur", this.showBlur);
     }
   }
 };

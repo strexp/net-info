@@ -11,6 +11,7 @@ import ForceGraph3D from "3d-force-graph";
 import SpriteText from "three-spritetext";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
+import { BokehPass } from "three/examples/jsm/postprocessing/BokehPass.js";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
 import {
   Object3D,
@@ -34,6 +35,14 @@ export default {
         new CubeTextureLoader().load(this.ldrUrls, bg => {
           this.Graph.scene().background = bg;
         });
+    },
+    showBlur(val) {
+      if (!val) {
+        this.Graph.postProcessingComposer().removePass(this.filters.bokehPass);
+      } else {
+        this.Graph.postProcessingComposer().removePass(this.filters.bokehPass);
+        this.Graph.postProcessingComposer().addPass(this.filters.bokehPass);
+      }
     },
     showGlow(val) {
       if (!val)
@@ -90,6 +99,7 @@ export default {
     showBg: true,
     showGlow: true,
     showText: true,
+    showBlur: false,
     ldrUrls: [
       "/static/skybox/right.png",
       "/static/skybox/left.png",
@@ -101,7 +111,8 @@ export default {
     filters: {
       bloomPass: null,
       fxaaPass: null,
-      cubeTexturePass: null
+      cubeTexturePass: null,
+      bokehPass: null
     }
   }),
   mounted() {
@@ -125,6 +136,9 @@ export default {
     Bus.$on("SwitchText", value => {
       this.showText = value;
     });
+    Bus.$on("SwitchBlur", value => {
+      this.showBlur = value;
+    });
     this.stats.showPanel(0);
     this.$store.commit("setDrawer", false);
     this.stats.domElement.style.bottom = "0px";
@@ -141,6 +155,11 @@ export default {
         .linkDirectionalParticles(graph.linkDirectionalParticles());
     },
     updateSelected(val) {
+      if (val !== null) {
+        this.filters.bokehPass.uniforms.focus.value = this.Graph.camera().position.distanceTo(
+          val.__threeObj.position
+        );
+      }
       this.selected = val;
       this.$emit("update:selected", this.selected);
     },
@@ -222,6 +241,18 @@ export default {
       );
       this.filters.fxaaPass = new ShaderPass(FXAAShader);
 
+      this.filters.bokehPass = new BokehPass(
+        this.Graph.scene(),
+        this.Graph.camera(),
+        {
+          focus: 1000.0,
+          aperture: 0.0003,
+          maxblur: 0.01,
+          width: window.innerWidth,
+          height: window.innerHeight
+        }
+      );
+
       var container = document.getElementById("container");
       const pixelRatio = this.Graph.renderer().getPixelRatio();
       this.filters.fxaaPass.material.uniforms["resolution"].value.x =
@@ -239,6 +270,7 @@ export default {
       });
 
       this.Graph.postProcessingComposer().addPass(this.filters.bloomPass);
+      this.Graph.postProcessingComposer().addPass(this.filters.bokehPass);
       this.Graph.postProcessingComposer().addPass(this.filters.fxaaPass);
     }
   }
