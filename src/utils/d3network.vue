@@ -270,7 +270,6 @@ export default {
       });
 
       this.Graph.postProcessingComposer().addPass(this.filters.bloomPass);
-      this.Graph.postProcessingComposer().addPass(this.filters.bokehPass);
       this.Graph.postProcessingComposer().addPass(this.filters.fxaaPass);
     }
   }
