@@ -39,8 +39,24 @@ export default {
     showBlur(val) {
       if (!val) {
         this.Graph.postProcessingComposer().removePass(this.filters.bokehPass);
+        this.filters.bokehPass = null;
       } else {
-        this.Graph.postProcessingComposer().removePass(this.filters.bokehPass);
+        if (this.filters.bokehPass)
+          this.Graph.postProcessingComposer().removePass(
+            this.filters.bokehPass
+          );
+        else
+          this.filters.bokehPass = new BokehPass(
+            this.Graph.scene(),
+            this.Graph.camera(),
+            {
+              focus: 1000.0,
+              aperture: 0.0003,
+              maxblur: 0.01,
+              width: window.innerWidth,
+              height: window.innerHeight
+            }
+          );
         this.Graph.postProcessingComposer().addPass(this.filters.bokehPass);
       }
     },
@@ -156,9 +172,10 @@ export default {
     },
     updateSelected(val) {
       if (val !== null) {
-        this.filters.bokehPass.uniforms.focus.value = this.Graph.camera().position.distanceTo(
-          val.__threeObj.position
-        );
+        if (this.filters.bokehPass)
+          this.filters.bokehPass.uniforms.focus.value = this.Graph.camera().position.distanceTo(
+            val.__threeObj.position
+          );
       }
       this.selected = val;
       this.$emit("update:selected", this.selected);
@@ -241,17 +258,17 @@ export default {
       );
       this.filters.fxaaPass = new ShaderPass(FXAAShader);
 
-      this.filters.bokehPass = new BokehPass(
-        this.Graph.scene(),
-        this.Graph.camera(),
-        {
-          focus: 1000.0,
-          aperture: 0.0003,
-          maxblur: 0.01,
-          width: window.innerWidth,
-          height: window.innerHeight
-        }
-      );
+      // this.filters.bokehPass = new BokehPass(
+      //   this.Graph.scene(),
+      //   this.Graph.camera(),
+      //   {
+      //     focus: 1000.0,
+      //     aperture: 0.0003,
+      //     maxblur: 0.01,
+      //     width: window.innerWidth,
+      //     height: window.innerHeight
+      //   }
+      // );
 
       var container = document.getElementById("container");
       const pixelRatio = this.Graph.renderer().getPixelRatio();
