@@ -3,7 +3,11 @@
     <NavBar />
     <Drawer />
     <v-main>
-      <v-container :class="$route.path == '/map' ? 'full-screen' : ''">
+      <v-container
+        :class="
+          $route.path == '/map' || $route.path == '/map2' ? 'full-screen' : ''
+        "
+      >
         <router-view :key="$route.fullPath" />
       </v-container>
     </v-main>

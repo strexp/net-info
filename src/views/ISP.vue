@@ -37,7 +37,7 @@
                   {{ o.name }}
                 </v-list-item-title>
                 <v-list-item-subtitle>
-                  {{ o.asn }}
+                  {{ o.asn }} - {{ o.centrality }}
                 </v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>

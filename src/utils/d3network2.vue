@@ -10,14 +10,12 @@ import * as Stats from "stats.js";
 import ForceGraph3D from "3d-force-graph";
 import SpriteText from "three-spritetext";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
-import { BokehPass } from "three/examples/jsm/postprocessing/BokehPass.js";
-import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
 import {
   Object3D,
   Color,
+  CubeTextureLoader,
   Vector2,
-  CubeTextureLoader
+  MOUSE
 } from "three/build/three.min.js";
 
 export default {
@@ -25,40 +23,6 @@ export default {
   watch: {
     nodeList() {
       if (!this.Graph) this.genView();
-    },
-    // linkList() {
-    //   if (!this.Graph) this.genView();
-    // },
-    showBg(val) {
-      if (!val) this.Graph.scene().background = new Color(0x000000);
-      else
-        new CubeTextureLoader().load(this.ldrUrls, bg => {
-          this.Graph.scene().background = bg;
-        });
-    },
-    showBlur(val) {
-      if (!val) {
-        this.Graph.postProcessingComposer().removePass(this.filters.bokehPass);
-        this.filters.bokehPass = null;
-      } else {
-        if (this.filters.bokehPass)
-          this.Graph.postProcessingComposer().removePass(
-            this.filters.bokehPass
-          );
-        else
-          this.filters.bokehPass = new BokehPass(
-            this.Graph.scene(),
-            this.Graph.camera(),
-            {
-              focus: 1000.0,
-              aperture: 0.0003,
-              maxblur: 0.01,
-              width: window.innerWidth,
-              height: window.innerHeight
-            }
-          );
-        this.Graph.postProcessingComposer().addPass(this.filters.bokehPass);
-      }
     },
     showGlow(val) {
       if (!val)
@@ -112,10 +76,8 @@ export default {
     highlight2Nodes: new Set(),
     stats: new Stats(),
     showHop2: true,
-    showBg: true,
     showGlow: true,
     showText: true,
-    showBlur: false,
     ldrUrls: [
       "/static/skybox/right.png",
       "/static/skybox/left.png",
@@ -125,10 +87,7 @@ export default {
       "/static/skybox/back.png"
     ],
     filters: {
-      bloomPass: null,
-      fxaaPass: null,
-      cubeTexturePass: null,
-      bokehPass: null
+      bloomPass: null
     }
   }),
   mounted() {
@@ -136,24 +95,15 @@ export default {
       var selectedNode = this.nodeList.find(n => n.asn === payload);
       if (selectedNode) this.updateSelected(selectedNode);
     });
-    Bus.$on("Focus", () => {
-      this.focusSelect();
-    });
     Bus.$on("SwitchHop2", value => {
       this.selected = null;
       this.showHop2 = value;
-    });
-    Bus.$on("SwitchBg", value => {
-      this.showBg = value;
     });
     Bus.$on("SwitchGlow", value => {
       this.showGlow = value;
     });
     Bus.$on("SwitchText", value => {
       this.showText = value;
-    });
-    Bus.$on("SwitchBlur", value => {
-      this.showBlur = value;
     });
     this.stats.showPanel(0);
     this.$store.commit("setDrawer", false);
@@ -171,25 +121,8 @@ export default {
         .linkDirectionalParticles(graph.linkDirectionalParticles());
     },
     updateSelected(val) {
-      if (val !== null) {
-        if (this.filters.bokehPass)
-          this.filters.bokehPass.uniforms.focus.value = this.Graph.camera().position.distanceTo(
-            val.__threeObj.position
-          );
-      }
       this.selected = val;
       this.$emit("update:selected", this.selected);
-    },
-    focusSelect() {
-      this.Graph.cameraPosition(
-        {
-          x: this.selected.x * 2,
-          y: this.selected.y * 2,
-          z: this.selected.z * 2
-        }, // new position
-        this.selected, // lookAt ({ x, y, z })
-        3000 // ms transition duration
-      );
     },
     genView: function() {
       this.highlightNodes = new Set();
@@ -200,6 +133,7 @@ export default {
           links: this.linkList
         })
         .nodeOpacity(1)
+        .numDimensions(2)
         .linkResolution(32)
         .linkOpacity(0.3)
         .enableNavigationControls(true)
@@ -274,34 +208,18 @@ export default {
 
           this.updateSelected(node || null);
         });
-
+      this.Graph.controls().noRotate = true;
+      this.Graph.controls().mouseButtons = {
+        LEFT: MOUSE.RIGHT,
+        MIDDLE: MOUSE.MIDDLE,
+        RIGHT: MOUSE.LEFT
+      };
       this.filters.bloomPass = new UnrealBloomPass(
         new Vector2(window.innerWidth, window.innerHeight),
         1.5,
         0.4,
         0.85
       );
-      this.filters.fxaaPass = new ShaderPass(FXAAShader);
-
-      // this.filters.bokehPass = new BokehPass(
-      //   this.Graph.scene(),
-      //   this.Graph.camera(),
-      //   {
-      //     focus: 1000.0,
-      //     aperture: 0.0003,
-      //     maxblur: 0.01,
-      //     width: window.innerWidth,
-      //     height: window.innerHeight
-      //   }
-      // );
-
-      var container = document.getElementById("container");
-      const pixelRatio = this.Graph.renderer().getPixelRatio();
-      this.filters.fxaaPass.material.uniforms["resolution"].value.x =
-        1 / (container.offsetWidth * pixelRatio);
-      this.filters.fxaaPass.material.uniforms["resolution"].value.y =
-        1 / (container.offsetHeight * pixelRatio);
-
       this.filters.bloomPass.strength = 1.2;
       this.filters.bloomPass.radius = 1;
       this.filters.bloomPass.threshold = 0.1;
@@ -312,7 +230,6 @@ export default {
       });
 
       this.Graph.postProcessingComposer().addPass(this.filters.bloomPass);
-      this.Graph.postProcessingComposer().addPass(this.filters.fxaaPass);
     }
   }
 };

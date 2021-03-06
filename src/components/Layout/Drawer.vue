@@ -62,7 +62,13 @@ export default {
       {
         url: "/map",
         icon: "mdi-map",
-        desc: "Map",
+        desc: "3D Map",
+        type: "dn42"
+      },
+      {
+        url: "/map2",
+        icon: "mdi-map",
+        desc: "2D Map",
         type: "dn42"
       },
       {

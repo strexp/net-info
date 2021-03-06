@@ -68,16 +68,11 @@ export default {
           Bus.$emit("Search", this.model);
         } else this.$router.push("/asinfo/" + this.model);
         this.search = null;
-        this.model = null;
       }
     },
     search() {
-      // Items have already been loaded
       if (this.items.length > 0) return;
-
       this.isLoading = true;
-
-      // Lazily load input items
       fetch(process.env.VUE_APP_API_URL + "/isp.json")
         .then(res => res.clone().json())
         .then(res => {

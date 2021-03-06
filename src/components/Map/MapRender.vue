@@ -2,10 +2,17 @@
   <div id="maprender">
     <div id="content-wrapper">
       <network
+        v-if="d == 3"
         :nodeList="nodes"
         :linkList="edges"
         :selected.sync="nodeSelected"
       ></network>
+      <network2
+        v-else
+        :nodeList="nodes"
+        :linkList="edges"
+        :selected.sync="nodeSelected"
+      ></network2>
     </div>
     <NodeInfo :node.sync="nodeSelected" />
   </div>
@@ -13,9 +20,11 @@
 
 <script>
 import network from "@/utils/d3network";
+import network2 from "@/utils/d3network2";
 import NodeInfo from "@/components/Map/NodeInfo";
 
 export default {
+  props: ["d"],
   data: () => ({
     nodes: [],
     edges: [],
@@ -23,6 +32,7 @@ export default {
   }),
   components: {
     network,
+    network2,
     NodeInfo
   },
   mounted() {

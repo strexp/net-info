@@ -1,6 +1,6 @@
 <template>
   <div class="map">
-    <MapRender class="map-render" :d="3" />
+    <MapRender class="map-render" :d="2" />
   </div>
 </template>
 

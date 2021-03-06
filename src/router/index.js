@@ -12,8 +12,13 @@ const routes = [
   },
   {
     path: "/map",
-    name: "Map",
+    name: "3D Map",
     component: () => import("@/views/Map.vue")
+  },
+  {
+    path: "/map2",
+    name: "2D Map",
+    component: () => import("@/views/Map2.vue")
   },
   {
     path: "/isp",
