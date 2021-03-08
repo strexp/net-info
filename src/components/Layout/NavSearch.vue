@@ -64,7 +64,7 @@ export default {
   watch: {
     model() {
       if (this.model) {
-        if (this.$route.name == "Map") {
+        if (this.$route.name == "3D Map" || this.$route.name == "2D Map") {
           Bus.$emit("Search", this.model);
         } else this.$router.push("/asinfo/" + this.model);
         this.search = null;
