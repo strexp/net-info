@@ -5,7 +5,11 @@
     <v-main>
       <v-container
         :class="
-          $route.path == '/map' || $route.path == '/map2' ? 'full-screen' : ''
+          $route.path == '/map' ||
+          $route.path == '/map2' ||
+          $route.path == '/registry'
+            ? 'full-screen'
+            : ''
         "
       >
         <router-view :key="$route.fullPath" />
@@ -22,11 +26,11 @@ export default {
   name: "App",
   components: {
     NavBar,
-    Drawer
+    Drawer,
   },
   data: () => ({
     //
-  })
+  }),
 };
 </script>
 
