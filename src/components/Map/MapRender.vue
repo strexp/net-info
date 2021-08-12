@@ -24,7 +24,7 @@ import network2 from "@/utils/d3network2";
 import NodeInfo from "@/components/Map/NodeInfo";
 
 export default {
-  props: ["d"],
+  props: ["d", "proto"],
   data: () => ({
     nodes: [],
     edges: [],
@@ -38,8 +38,10 @@ export default {
   mounted() {
     this.$ajax
       .get(
-        process.env.VUE_APP_API_URL +
-          "/graph.json?rnd=" +
+        process.env.VUE_APP_DATA_URL +
+          "/graph/" +
+          this.proto +
+          ".json?rnd=" +
           Math.floor(Date.now() / 600000)
       )
       .then(response => {

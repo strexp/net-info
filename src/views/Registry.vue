@@ -14,23 +14,23 @@ import RegistryMap from "@/components/Registry/RegistryMap";
 export default {
   data: () => ({
     prefixes: null,
-    meta: null,
+    meta: null
   }),
   mounted() {
     this.$ajax
       .get(process.env.VUE_APP_API_URL + "/kioubit/prefixes.json")
-      .then((response) => {
+      .then(response => {
         this.prefixes = response.data;
       });
     this.$ajax
       .get(process.env.VUE_APP_API_URL + "/kioubit/meta.json")
-      .then((response) => {
+      .then(response => {
         this.meta = response.data;
       });
   },
   components: {
-    RegistryMap,
-  },
+    RegistryMap
+  }
 };
 </script>
 

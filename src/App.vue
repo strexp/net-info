@@ -5,9 +5,9 @@
     <v-main>
       <v-container
         :class="
-          $route.path == '/map' ||
-          $route.path == '/map2' ||
-          $route.path == '/registry'
+          $route.path.includes('/map') ||
+          $route.path.includes('/map2') ||
+          $route.path.includes('/registry')
             ? 'full-screen'
             : ''
         "
@@ -26,11 +26,11 @@ export default {
   name: "App",
   components: {
     NavBar,
-    Drawer,
+    Drawer
   },
   data: () => ({
     //
-  }),
+  })
 };
 </script>
 

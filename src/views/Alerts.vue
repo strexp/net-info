@@ -87,22 +87,13 @@ export default {
   mounted() {
     this.$ajax
       .get(
-        process.env.VUE_APP_API_URL +
-          "/alerts.json?rnd=" +
+        process.env.VUE_APP_DATA_URL +
+          "/roa/alerts.json?rnd=" +
           Math.floor(Date.now() / 600000)
       )
       .then(response => {
-        response.data.roa_data.forEach(alt => {
-          if (
-            alt.prefix.match(
-              /^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$/
-            )
-          ) {
-            this.alerts.ipv4.push(alt);
-          } else {
-            this.alerts.ipv6.push(alt);
-          }
-        });
+        this.alerts.ipv4 = response.data.roa4_data;
+        this.alerts.ipv6 = response.data.roa6_data;
         this.loading = false;
       });
   }

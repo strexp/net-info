@@ -67,8 +67,10 @@ export default {
   mounted() {
     this.$ajax
       .get(
-        process.env.VUE_APP_API_URL +
-          "/isp.json?rnd=" +
+        process.env.VUE_APP_DATA_URL +
+          "/isp/isp" +
+          (this.$route.params.proto == "6" ? "6" : "4") +
+          ".json?rnd=" +
           Math.floor(Date.now() / 600000)
       )
       .then(response => {

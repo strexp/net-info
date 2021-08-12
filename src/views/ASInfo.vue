@@ -96,8 +96,8 @@ export default {
   mounted() {
     this.$ajax
       .get(
-        process.env.VUE_APP_API_URL +
-          "/as/AS" +
+        process.env.VUE_APP_DATA_URL +
+          "/asn/AS" +
           this.$route.params.asn +
           ".json?rnd=" +
           Math.floor(Date.now() / 600000)

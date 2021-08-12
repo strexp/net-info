@@ -1,6 +1,10 @@
 <template>
   <div class="map">
-    <MapRender class="map-render" :d="2" />
+    <MapRender
+      class="map-render"
+      :d="2"
+      :proto="$route.params.proto == '6' ? 'ipv6' : 'ipv4'"
+    />
   </div>
 </template>
 

@@ -13,20 +13,32 @@
     <v-divider /> -->
 
     <v-list nav>
-      <v-list-item
-        link
-        v-for="item in list_item"
-        :key="item.url"
-        :to="item.url"
-      >
-        <v-list-item-icon>
-          <v-icon>{{ item.icon }}</v-icon>
-        </v-list-item-icon>
+      <div v-for="item in list_item" :key="item.url">
+        <v-list-item link :to="item.url" v-if="!('sub' in item)">
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
 
-        <v-list-item-content>
-          <v-list-item-title>{{ item.desc }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.desc }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-group v-else :prepend-icon="item.icon">
+          <template v-slot:activator>
+            <v-list-item-title>{{ item.desc }}</v-list-item-title>
+          </template>
+          <v-list-item
+            v-for="sitem in item.sub"
+            :key="sitem.url"
+            link
+            :to="sitem.url"
+          >
+            <v-list-item-content>
+              <v-list-item-title>{{ sitem.desc }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
+      </div>
     </v-list>
 
     <template v-slot:append>
@@ -63,19 +75,49 @@ export default {
         url: "/map",
         icon: "mdi-map",
         desc: "3D Map",
-        type: "dn42"
+        type: "dn42",
+        sub: [
+          {
+            url: "/map/4",
+            desc: "IPv4"
+          },
+          {
+            url: "/map/6",
+            desc: "IPv6"
+          }
+        ]
       },
       {
         url: "/map2",
         icon: "mdi-map",
         desc: "2D Map",
-        type: "dn42"
+        type: "dn42",
+        sub: [
+          {
+            url: "/map2/4",
+            desc: "IPv4"
+          },
+          {
+            url: "/map2/6",
+            desc: "IPv6"
+          }
+        ]
       },
       {
         url: "/isp",
         icon: "mdi-network",
         desc: "ISPs",
-        type: "dn42"
+        type: "dn42",
+        sub: [
+          {
+            url: "/isp/4",
+            desc: "IPv4"
+          },
+          {
+            url: "/isp/6",
+            desc: "IPv6"
+          }
+        ]
       },
       {
         url: "/alerts",

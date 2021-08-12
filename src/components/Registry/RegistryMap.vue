@@ -7,7 +7,7 @@ import Icicle from "icicle-chart";
 export default {
   props: ["prefixes", "meta"],
   data: () => ({
-    vis: null,
+    vis: null
   }),
   methods: {
     getAttr(attr, obj) {
@@ -46,7 +46,7 @@ export default {
       var status = this.getAttr("status", this.meta[node.prefix])[0];
       var mnt = this.getAttr("mnt-by", this.meta[node.prefix])[0];
       return "Status: " + status + "<br>MNT: " + mnt + "<br>Size: " + node.size;
-    },
+    }
   },
   mounted: function() {
     Icicle()
@@ -61,7 +61,7 @@ export default {
       .tooltipTitle(this.getTitle)
       .tooltipContent(this.getContent)
       .data(this.prefixes)("#chart");
-  },
+  }
 };
 </script>
 
