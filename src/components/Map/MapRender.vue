@@ -52,7 +52,7 @@ export default {
           node.id = parseInt(node.id);
           //node.label = node.asn;
           node.val = node.size * 40 - 60;
-          node.peers = [];
+          node.peers = new Set();
         }
         for (i = 0; i < this.edges.length; ++i) {
           var edge = this.edges[i];
@@ -67,9 +67,8 @@ export default {
             }
           }
           if (!sourceNode || !targetNode) continue;
-          //sourceNode.peers.push({ id: targetNode.id, label: targetNode.name });
-          sourceNode.peers.push(targetNode);
-          targetNode.peers.push(sourceNode);
+          sourceNode.peers.add(targetNode);
+          targetNode.peers.add(sourceNode);
         }
       });
   }

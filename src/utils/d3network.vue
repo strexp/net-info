@@ -235,7 +235,7 @@ export default {
           return "rgba(150,150,150," + node.val / 30 + ")";
         })
         .linkColor(edge => {
-          if (!this.selected) return "rgba(255,255,255,0.6)";
+          if (!this.selected) return "rgba(255,255,255,0.4)";
           if (edge.source == this.selected || edge.target == this.selected) {
             return "rgba(0,255,255,1)";
           } else if (

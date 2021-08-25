@@ -24,9 +24,13 @@
       </v-row>
       <v-divider />
       <v-card-text class="peers-view">
-        <b>Peers: {{ node.peers.length }}</b
+        <b>Peers: {{ node.peers.size }}</b
         ><br />
-        <span @click="selectPeer(p)" v-for="p in node.peers" :key="p.id">
+        <span
+          @click="selectPeer(p)"
+          v-for="p in Array.from(node.peers)"
+          :key="p.id"
+        >
           {{ p.name }}<br />
         </span>
       </v-card-text>
@@ -100,9 +104,13 @@
       </v-row>
       <v-divider />
       <v-card-text class="peers-view">
-        <b>Peers: {{ node.peers.length }}</b
+        <b>Peers: {{ node.peers.size }}</b
         ><br />
-        <span @click="selectPeer(p)" v-for="p in node.peers" :key="p.id">
+        <span
+          @click="selectPeer(p)"
+          v-for="p in Array.from(node.peers)"
+          :key="p.id"
+        >
           {{ p.name }}<br />
         </span>
       </v-card-text>
