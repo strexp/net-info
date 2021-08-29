@@ -49,7 +49,12 @@ export default {
       if (!this.meta[node.prefix]) return node.prefix;
       var status = this.getAttr("status", this.meta[node.prefix]);
       var mnt = this.getAttr("mnt-by", this.meta[node.prefix]);
-      return "Status: " + status + "<br>MNT: " + mnt + "<br>Size: " + node.size;
+      var rstr =
+        "Status: " + status + "<br>MNT: " + mnt + "<br>Size: " + node.size;
+      var pol = this.getAttr("policy", this.meta[node.prefix]);
+      if (pol[0] !== null) rstr = rstr + "<br>Policy: " + pol;
+      rstr = rstr + "<br>Prefix: " + node.prefix;
+      return rstr;
     }
   },
   mounted() {
@@ -60,7 +65,7 @@ export default {
       .excludeRoot(true)
       .orientation("td")
       .color(this.nodeColor)
-      //.minSegmentWidth(0.3)
+      .minSegmentWidth(0.2)
       .width(window.innerWidth)
       .height(window.innerHeight)
       .tooltipTitle(this.getTitle)
