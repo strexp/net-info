@@ -17,13 +17,30 @@ export default {
     meta: null
   }),
   mounted() {
+    var proto = this.$route.params.proto == "6" ? "6" : "4";
     this.$ajax
-      .get(process.env.VUE_APP_API_URL + "/kioubit/prefixes.json")
+      .get(
+        process.env.VUE_APP_DATA_URL +
+          "/registry/prefix." +
+          proto +
+          ".json?time=1"
+      )
       .then(response => {
         this.prefixes = response.data;
+        if (proto == "4")
+          this.prefixes.size = Math.pow(2, 32 - 14) + Math.pow(2, 32 - 16);
+        if (proto == "6") {
+          this.prefixes.children[0].size = Math.pow(2, 128 - 32);
+          this.prefixes.size = this.prefixes.children[0].size;
+        }
       });
     this.$ajax
-      .get(process.env.VUE_APP_API_URL + "/kioubit/meta.json")
+      .get(
+        process.env.VUE_APP_DATA_URL +
+          "/registry/meta." +
+          proto +
+          ".json?time=1"
+      )
       .then(response => {
         this.meta = response.data;
       });

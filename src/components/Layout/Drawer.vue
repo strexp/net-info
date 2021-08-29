@@ -135,7 +135,17 @@ export default {
         url: "/registry",
         icon: "mdi-book",
         desc: "Registry",
-        type: "dn42"
+        type: "dn42",
+        sub: [
+          {
+            url: "/registry/4",
+            desc: "IPv4"
+          },
+          {
+            url: "/registry/6",
+            desc: "IPv6"
+          }
+        ]
       },
       {
         url: "/about",

@@ -76,6 +76,11 @@ const routes = [
     component: () => import("@/views/Registry.vue")
   },
   {
+    path: "/registry/:proto",
+    name: "DN42 Registry",
+    component: () => import("@/views/Registry.vue")
+  },
+  {
     path: "*",
     name: "404",
     component: () => import("@/views/404.vue")
