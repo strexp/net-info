@@ -36,7 +36,7 @@
                   {{ alt.name }} <br />
                   <span class="grey--text">{{ alt.asn }}</span>
                 </td>
-                <td>{{ alt.prefix }}</td>
+                <td @click="selectAlert(alt)">{{ alt.prefix }}</td>
               </tr>
             </tbody>
           </v-simple-table>
@@ -65,13 +65,44 @@
                   <br />
                   <span class="grey--text">{{ alt.asn }}</span>
                 </td>
-                <td>{{ alt.prefix }}</td>
+                <td @click="selectAlert(alt)">{{ alt.prefix }}</td>
               </tr>
             </tbody>
           </v-simple-table>
         </v-card>
       </v-col>
     </v-row>
+    <v-dialog v-model="dialog" width="500">
+      <v-card>
+        <v-card-title>ROA Violation Info</v-card-title>
+        <v-divider />
+        <v-card-text class="mt-4">
+          <p>
+            <v-icon left>mdi-network</v-icon>Network:
+            <code>{{ selected_alert.name }} ({{ selected_alert.asn }})</code>
+            <v-btn :to="'/ASInfo/' + selected_alert.asn" icon
+              ><v-icon>mdi-information</v-icon></v-btn
+            >
+          </p>
+          <p>
+            <v-icon left>mdi-ip</v-icon>Prefix:
+            <code>{{ selected_alert.prefix }}</code>
+          </p>
+          <p>
+            <v-icon left>mdi-router-network</v-icon>AS Path:
+            <v-chip
+              :to="'/ASInfo/' + path"
+              small
+              label
+              v-for="path in selected_alert.aspath"
+              :key="path"
+              class="mx-1 "
+              >{{ path }}</v-chip
+            >
+          </p>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -82,8 +113,16 @@ export default {
       ipv4: [],
       ipv6: []
     },
-    loading: true
+    loading: true,
+    dialog: false,
+    selected_alert: {}
   }),
+  methods: {
+    selectAlert(it) {
+      this.selected_alert = it;
+      this.dialog = true;
+    }
+  },
   mounted() {
     this.$ajax
       .get(
