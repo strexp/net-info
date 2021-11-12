@@ -14,14 +14,19 @@
     item-value="asn"
     flat
     solo-inverted
+    @keydown.enter="onEnter"
     prepend-inner-icon="mdi-magnify"
     label="Search for a network..."
   >
     <template v-slot:no-data>
       <v-list-item>
-        <v-list-item-title>
+        <v-list-item-title v-if="!search">
           Search for a
           <strong>DN42 Network</strong>
+        </v-list-item-title>
+        <v-list-item-title v-else>
+          No <strong>reachable</strong> network found. Press
+          <strong>enter</strong> to search for it.
         </v-list-item-title>
       </v-list-item>
     </template>
@@ -54,6 +59,15 @@ export default {
     search: null
   }),
   methods: {
+    onEnter() {
+      this.searchAction(this.search);
+      this.search = null;
+    },
+    searchAction(asn) {
+      if (this.$route.name == "3D Map" || this.$route.name == "2D Map") {
+        Bus.$emit("Search", asn);
+      } else this.$router.push("/asinfo/" + asn);
+    },
     customFilter(item, queryText) {
       return (
         item.asn.toLowerCase().includes(queryText.toLowerCase()) ||
@@ -64,22 +78,17 @@ export default {
   watch: {
     model() {
       if (this.model) {
-        if (this.$route.name == "3D Map" || this.$route.name == "2D Map") {
-          Bus.$emit("Search", this.model);
-        } else this.$router.push("/asinfo/" + this.model);
+        this.searchAction(this.model);
         this.search = null;
       }
     },
     search() {
       if (this.items.length > 0) return;
       this.isLoading = true;
-      fetch(process.env.VUE_APP_API_URL + "/isp.json")
+      fetch(process.env.VUE_APP_DATA_URL + "/isp/isp.json")
         .then(res => res.clone().json())
         .then(res => {
-          this.items = [];
-          res.forEach(group => {
-            this.items = this.items.concat(group.data);
-          });
+          this.items = res;
         })
         .catch(err => {
           console.log(err);
